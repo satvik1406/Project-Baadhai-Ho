@@ -146,6 +146,7 @@ confirmation('photographer');
 app.get("*",(req,res)=>{
     res.sendFile(path.join(__dirname,"basic/public",'index.html'))
 })
-app.listen(5000, ()=>{
-    console.log('The server listenining on port 5000')
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
