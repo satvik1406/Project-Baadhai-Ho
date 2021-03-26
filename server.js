@@ -14,7 +14,7 @@ app.use(express.static("basic/public"));
 app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-// app.use(express.static(path.join(__dirname, "client/src", "build")))
+app.use(express.static(path.join(__dirname, "client", "build")))
 
 function rec_login(user, collec_name){
     const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
@@ -89,7 +89,7 @@ call_back('/photographer','photog');
 // confirmation('photographer');
 
 app.get("*",(req,res)=>{
-    res.sendFile(path.join(__dirname,"client/public",'index.html'))
+    res.sendFile(path.join(__dirname,"client",'build','index.html'))
 })
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
