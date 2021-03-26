@@ -1,0 +1,40 @@
+{
+  "name": "baadhaiho",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "client/index.js",
+  
+  "dependencies": {
+    "@material-ui/core": "4.11.3",
+    "@material-ui/icons": "4.11.2",
+    "bootstrap": "4.6.0",
+    "console": "0.7.2",
+    "cors": "2.8.5",
+    "mongoose": "5.12.2",
+    "react": "16.8.6",
+    "react-bootstrap": "1.5.2",
+    "react-dom": "16.8.6",
+    "react-flippy": "0.1.5",
+    "react-router-dom": "5.2.0",
+    "react-scripts": "3.2.0",
+    "uuid": "3.3.3"
+  },
+  "devDependencies": {
+    "typescript": "3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "proxy":"http://localhost:5000"
+}

@@ -11,10 +11,10 @@ const { Db } = require('mongodb');
 let app = express();
 app.disable("x-powered-by");
 app.use(express.static("basic/public"));
-//app.use(cors({origin: true, credentials: true}));
+app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
+// app.use(express.static(path.join(__dirname, "client/src", "build")))
 
 function rec_login(user, collec_name){
     const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
@@ -41,35 +41,9 @@ function rec_login(user, collec_name){
         .catch( (err) => {
             console.error(`Error connecting to the database. \n${err}`);
         })
-        // .finally(()=>{
-        //     mongoose.connection.close()
-        // })
-    // mongoose.connection.close()
+
 }
-// async function listDatabases(client){
-//     databasesList = await client.db().admin().listDatabases();
- 
-//     console.log("Databases:");
-//     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-// };
- 
-// const uri = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// async function main(client){
-//     try {
-//         await  client.connect();
-//         console.log("in main");
-//         await  listDatabases(client);
-//     } catch (e) {
-//         console.log("error in catch")
-//         console.error(e);
-//     } 
-//     finally{
-//         console.log("closing.......")
-//         client.close()
-//     }
-// }
-// main(client).catch(console.error);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -89,7 +63,11 @@ function call_back(category,type){
         }
 
             rec_login(user, cat)
-		res.redirect(category+'/home')
+		// res.redirect(category)
+        res.writeHead(302, {
+            Location: 'http://localhost:3000'+category
+        });
+        res.end();
 	})
 }
 
@@ -98,53 +76,20 @@ call_back('/banquet','banq');
 call_back('/caterer','cat');
 call_back('/photographer','photog');
 
-// app.get('/customer/google',passport.authenticate('cust', {scope:['profile','email']}))
-// app.get('/customer/google/callback',
-//     passport.authenticate('cust',{failureRedirect: '/failed'}),(req,res)=>{
-//     console.log(req.user)
-//     res.redirect('/customer/home')
-// })
 
+// function confirmation(category){
+// 	app.get('/'+ category + '/home',(req,res)=>{
+//     	res.send('successful login '+ category)
+// 	})
+// }
 
-// app.get('/banquet/google', passport.authenticate('banq', {scope:['profile','email']}))
-// app.get('/banquet/google/callback',
-//     passport.authenticate('banq',{failureRedirect: '/failed'}),(req,res)=>{
-//     console.log(req.user)
-//     res.redirect('/banquet/home')
-// })
-
-// app.get('/caterer/google', passport.authenticate('cat', {scope:['profile','email']}))
-// app.get('/caterer/google/callback',
-//     passport.authenticate('cat',{failureRedirect: '/failed'}),(req,res)=>{
-//     console.log(req.user)
-//     res.redirect('/caterer/home')
-// })
-
-// app.get('/photographer/google', passport.authenticate('photog', {scope:['profile','email']}))
-// app.get('/photographer/google/callback',
-//     passport.authenticate('photog',{failureRedirect: '/failed'}),(req,res)=>{
-//     console.log(req.user)
-//     res.redirect('/photographer/home')
-// })
-
-
-// app.get("/customer/home",(req,res)=>{
-//     res.send('successful login customer')
-// })
-
-function confirmation(category){
-	app.get('/'+ category + '/home',(req,res)=>{
-    	res.send('successful login '+ category)
-	})
-}
-
-confirmation('customer');
-confirmation('banquet');
-confirmation('caterer');
-confirmation('photographer');
+// confirmation('customer');
+// confirmation('banquet');
+// confirmation('caterer');
+// confirmation('photographer');
 
 app.get("*",(req,res)=>{
-    res.sendFile(path.join(__dirname,"basic/public",'index.html'))
+    res.sendFile(path.join(__dirname,"client/public",'index.html'))
 })
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
