@@ -1,0 +1,37 @@
+Html Webpack Plugin:
+<pre>
+  Error: Parse Error: <link font-family: "Montserrat", sans-seri  f;
+      href="https://fonts.googleapis.com/css?family=McLaren|Mont  serrat&display=swap"
+      rel="stylesheet" />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/  css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/  Z6nronJ3oUOFUFpCjEUQouq2+l"
+        crossorigin="anonymous"
+      />
+      <link rel="stylesheet" href="styles.css" />
+     <link id="external-css" rel="stylesheet" type="text/css" hr  ef="https://fonts.googleapis.com/css?family=Montserrat&amp;dis  play=swap" media="all">
+  <link href="/static/css/2.9385578f.chunk.css" rel="stylesheet"  ></head>
+    <body>
+      <div id="root"></div>
+      <script src="./src/index.js" type="text/jsx"></script>
+    <script>!function(e){function r(r){for(var n,a,i=r[0],l=r[1]  ,f=r[2],c=0,s=[];c<i.length;c++)a=i[c],Object.prototype.hasOwn  Property.call(o,a)&&o[a]&&s.push(o[a][0]),o[a]=0;for(n in l)Ob  ject.prototype.hasOwnProperty.call(l,n)&&(e[n]=l[n]);for(p&&p(  r);s.length;)s.shift()();return u.push.apply(u,f||[]),t()}func  tion t(){for(var e,r=0;r<u.length;r++){for(var t=u[r],n=!0,i=1  ;i<t.length;i++){var l=t[i];0!==o[l]&&(n=!1)}n&&(u.splice(r--,  1),e=a(a.s=t[0]))}return e}var n={},o={1:0},u=[];function a(r)  {if(n[r])return n[r].exports;var t=n[r]={i:r,l:!1,exports:{}};  return e[r].call(t.exports,t,t.exports,a),t.l=!0,t.exports}a.m  =e,a.c=n,a.d=function(e,r,t){a.o(e,r)||Object.defineProperty(e  ,r,{enumerable:!0,get:t})},a.r=function(e){"undefined"!==typeo  f Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.t  oStringTag,{value:"Module"}),Object.defineProperty(e,"__esModu  le",{value:!0})},a.t=function(e,r){if(1&r&&(e=a(e)),8&r)return   e;if(4&r&&"object"===typeof e&&e&&e.__esModule)return e;var t  =Object.create(null);if(a.r(t),Object.defineProperty(t,"defaul  t",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var n   in e)a.d(t,n,function(r){return e[r]}.bind(null,n));return t},  a.n=function(e){var r=e&&e.__esModule?function(){return e.defa  ult}:function(){return e};return a.d(r,"a",r),r},a.o=function(  e,r){return Object.prototype.hasOwnProperty.call(e,r)},a.p="/"  ;var i=this.webpackJsonpbaadhaiho=this.webpackJsonpbaadhaiho||  [],l=i.push.bind(i);i.push=r,i=i.slice();for(var f=0;f<i.lengt  h;f++)r(i[f]);var p=l;t()}([]);
+  //# sourceMappingURL=runtime-main.bafa8adc.js.map</script><scr  ipt src="/static/js/2.f19837cf.chunk.js"></script><script src=  "/static/js/main.561591d9.chunk.js"></script></body>
+  </html>
+  
+  - htmlparser.js:240 new HTMLParser
+    [client]/[html-minifier]/src/htmlparser.js:240:13
+  
+  - htmlminifier.js:966 minify
+    [client]/[html-minifier]/src/htmlminifier.js:966:3
+  
+  - htmlminifier.js:1326 Object.exports.minify
+    [client]/[html-minifier]/src/htmlminifier.js:1326:16
+  
+  - index.js:437 HtmlWebpackPlugin.postProcessHtml
+    [client]/[html-webpack-plugin]/index.js:437:34
+  
+  - index.js:270 
+    [client]/[html-webpack-plugin]/index.js:270:25
+  
+</pre>
