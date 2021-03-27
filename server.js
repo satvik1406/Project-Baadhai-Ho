@@ -10,7 +10,7 @@ const { Db } = require('mongodb');
 
 let app = express();
 app.disable("x-powered-by");
-app.use(express.static("basic/public"));
+// app.use(express.static("basic/public"));
 app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -62,11 +62,12 @@ function call_back(category,type){
             name:user_name
         }
 
-            rec_login(user, cat)
-		// res.redirect(category)
-        res.writeHead(302, {
-            Location: 'http://localhost:3000'+category
-        });
+        rec_login(user, cat)
+		res.redirect(category)
+        // console.log(category)
+        // res.writeHead(302, {
+        //     Location: 'http://localhost:5000'+category
+        // });
         res.end();
 	})
 }
@@ -95,3 +96,11 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
+
+// "client-install": "npm install --prefix client",
+//     "start": "node server.js",
+//     "client": "npm start --prefix client",
+//     "test": "echo \"Error: no test specified\" && exit 1",
+//     "server": "nodemon server.js ",
+//     "dev": "concurrently \"cd client && npm run start\" \"npm run server\"",
+//     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client        && npm run build --prefix client"
