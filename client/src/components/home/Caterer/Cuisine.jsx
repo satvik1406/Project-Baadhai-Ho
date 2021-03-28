@@ -10,7 +10,7 @@ function Cuisine() {
   function addNote(newNote) {
     console.log(newNote);
     setNotes((prevNotes) => {
-      return [...prevNotes, newNote];
+      return [newNote];
     });
   }
 

@@ -27,13 +27,13 @@ function CreateArea(props) {
 
   function submitNote(event) {
     props.onAdd(note);
-    setNote({
-      title: "",
-      tel: "",
-      cuisine: "",
-      cost: "",
-      content: ""
-    });
+    // setNote({
+    //   title: "",
+    //   tel: "",
+    //   cuisine: "",
+    //   cost: "",
+    //   content: ""
+    // });
     event.preventDefault();
   }
 

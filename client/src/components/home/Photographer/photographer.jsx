@@ -3,15 +3,24 @@ import React, { useState } from "react";
 // import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
+import axios from 'axios';
 
 function App() {
   const [notes, setNotes] = useState([]);
 
   function addNote(newNote) {
     console.log(newNote);
-    setNotes((prevNotes) => {
-      return [...prevNotes, newNote];
+
+    // const url = "http://localhost:5000/photographer";
+    // const reactData = [{ id: 1, name:' Tom'}, { id: 2, name:' Sarah'}];
+    
+    
+      setNotes((prevNotes) => {
+      return [newNote];
     });
+    // axios.post(url, newNote)
+    //   .then(res => console.log('Data send is:'+res.data))
+    //   .catch(err => console.log("error in react "+err.data))
   }
 
   function deleteNote(id) {

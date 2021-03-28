@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { profile } = require('console');
 const mongoose = require('mongoose');
 const { Db } = require('mongodb');
+const axios=require('axios');
 // const MongoClient = require('mongodb').MongoClient;
 
 let app = express();
@@ -77,7 +78,15 @@ call_back('/banquet','banq');
 call_back('/caterer','cat');
 call_back('/photographer','photog');
 
+// const url = "http://localhost:5000/photographer";
+// const usersData= [];
 
+
+// axios.get(url)
+//    .then(res => usersData.push(res.data))
+//    .catch(err => console.log("error in sever"+err.data))
+
+// console.log("the data is:"+usersData);
 // function confirmation(category){
 // 	app.get('/'+ category + '/home',(req,res)=>{
 //     	res.send('successful login '+ category)

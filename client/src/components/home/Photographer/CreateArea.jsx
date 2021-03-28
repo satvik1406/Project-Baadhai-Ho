@@ -3,6 +3,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
 
+
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
 
@@ -26,12 +27,12 @@ function CreateArea(props) {
 
   function submitNote(event) {
     props.onAdd(note);
-    setNote({
-      title: "",
-      tel: "",
-      cost: "",
-      content: ""
-    });
+    // setNote({
+    //   title: "",
+    //   tel: "",
+    //   cost: "",
+    //   content: ""
+    // });
     event.preventDefault();
   }
 
