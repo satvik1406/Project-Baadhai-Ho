@@ -7,7 +7,7 @@ const { profile } = require('console');
 const mongoose = require('mongoose');
 const { Db } = require('mongodb');
 const axios=require('axios');
-fdddddddddd
+
 let app = express();
 app.disable("x-powered-by");
 app.use(express.static("basic/public"));
@@ -20,6 +20,13 @@ app.use(passport.session());
 require("./passport.js");
 
 var add_to_email;
+const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
+const connectionParams={
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true 
+}
+
 function add_details(category){
     app.post('/'+category+'/update', (req, res, next) => {
         console.log(add_to_email)
@@ -27,23 +34,20 @@ function add_details(category){
         res.status(201).json({
           message: 'Thing created successfully!'
         });
-        mongoose.connect(url,connectionParams)
-        .then( () => {
-            var db=mongoose.connection.db
-            db.collection(collec_name).findOne({email:user.email},function(err,data){
-                if(err){
-                    console.log(err)
-                }
-                if(data==null){
-                    console.log("not found, inserting")
-                    db.collection(collec_name).insertOne(user)
-                }
-            })
+        // mongoose.connect(url,connectionParams)
+        // .then( () => {
+        //     var db=mongoose.connection.db
+        //     db.collection(collec_name).findOne({email:add},function(err,data){
+        //         if(err){
+        //             console.log(err)
+        //         }
+                
+        //     })
             
-        })
-        .catch( (err) => {
-            console.error(`Error connecting to the database. \n${err}`);
-        })
+        // })
+        // .catch( (err) => {
+        //     console.error(`Error connecting to the database. \n${err}`);
+        // })
        });
 }
 
@@ -52,12 +56,6 @@ function rec_mail(email){
 }
 
 function rec_login(user, collec_name){
-    const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
-    const connectionParams={
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true 
-    }
     mongoose.connect(url,connectionParams)
         .then( () => {
             var db=mongoose.connection.db
@@ -96,14 +94,14 @@ function call_back(category,type){
 
 }
 
+add_details('banquet')
+add_details('photographer')
+add_details('caterer')
+
 call_back('/customer','cust');
 call_back('/banquet','banq');
 call_back('/caterer','cat');
 call_back('/photographer','photog');
-
-add_details('banquet')
-add_details('photographer')
-add_details('caterer')
 
 app.get("*",(req,res)=>{
     res.sendFile(path.join(__dirname,"client",'build','index.html'))

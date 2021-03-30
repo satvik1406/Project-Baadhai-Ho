@@ -30,7 +30,7 @@ function Cards(props) {
             <Button
               variant="outline-dark"
               onClick={() => {
-                window.location.assign("http://localhost:5000/"+props.variab+"/google");
+                window.location.assign("https://boiling-shore-86650.herokuapp.com/"+props.variab+"/google");
                 history.push(props.route);
               }}
             >
