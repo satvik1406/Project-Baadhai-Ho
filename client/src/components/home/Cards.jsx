@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import  {Switch,BrowserRouter, Route}  from "react-router-dom";
 
 function Cards(props) {
   return (
@@ -30,7 +30,7 @@ function Cards(props) {
             <Button
               variant="outline-dark"
               onClick={() => {
-                window.location.assign("http://boiling-shore-86650.herokuapp.com/"+props.variab+"/google");
+                window.location.assign("http://localhost:5000/"+props.variab+"/google");
                 history.push(props.route);
               }}
             >
@@ -38,7 +38,6 @@ function Cards(props) {
             </Button>
           )}
         />
-        {/* <Button variant="primary">Login for Free</Button> */}
       </Card.Body>
     </Card>
   );
