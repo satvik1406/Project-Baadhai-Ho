@@ -27,32 +27,66 @@ const connectionParams={
     useUnifiedTopology: true 
 }
 
+function rec_mail(email){
+    add_to_email=email;
+}
+
 function add_details(category){
     app.post('/'+category+'/update', (req, res, next) => {
-        console.log(add_to_email)
-        console.log(req.body);
         res.status(201).json({
           message: 'Thing created successfully!'
         });
-        // mongoose.connect(url,connectionParams)
-        // .then( () => {
-        //     var db=mongoose.connection.db
-        //     db.collection(collec_name).findOne({email:add},function(err,data){
-        //         if(err){
-        //             console.log(err)
-        //         }
-                
-        //     })
-            
-        // })
-        // .catch( (err) => {
-        //     console.error(`Error connecting to the database. \n${err}`);
-        // })
-       });
+        mongoose.connect(url,connectionParams)
+        .then( () => {
+            var db=mongoose.connection.db
+            db.collection(category).findOneAndUpdate(
+                { email: add_to_email}, 
+                {$set:{
+                    title: req.body.title, 
+                    tel: req.body.tel, 
+                    type: req.body.type, 
+                    cost: req.body.cost,
+                    content: req.body.content
+                }},
+               function (err, data) {
+                     if (err) {
+                         console.log(err);
+                     }
+                 });
+        })
+        .catch( (err) => {
+            console.error(`Error connecting to the database while updating. \n${err}`);
+        })
+    });
 }
 
-function rec_mail(email){
-    add_to_email=email;
+function del(category){
+    app.post('/'+category+'/delete', (req, res, next) => {
+        res.status(301).json({
+          message: 'Thing created successfully!'
+        });
+        mongoose.connect(url,connectionParams)
+        .then( () => {
+            var db=mongoose.connection.db
+            db.collection(category).findOneAndUpdate(
+                { email: add_to_email}, 
+                {$set:{
+                    title: "NONE", 
+                    tel: "NONE", 
+                    type: "NONE", 
+                    cost: "NONE",
+                    content: "NONE"
+                }},
+               function (err, data) {
+                     if (err) {
+                         console.log(err);
+                     }
+                 });
+        })
+        .catch( (err) => {
+            console.error(`Error connecting to the database while updating. \n${err}`);
+        })
+    });
 }
 
 function rec_login(user, collec_name){
@@ -64,11 +98,9 @@ function rec_login(user, collec_name){
                     console.log(err)
                 }
                 if(data==null){
-                    console.log("not found, inserting")
                     db.collection(collec_name).insertOne(user)
                 }
             })
-            
         })
         .catch( (err) => {
             console.error(`Error connecting to the database. \n${err}`);
@@ -85,14 +117,50 @@ function call_back(category,type){
         cat=category.substring(1);
         var user={
             email:email_id,
-            name:user_name
+            name:user_name,
+            title: "NONE",
+            tel: "NONE",
+            type: "NONE",
+            cost: "NONE", 
+            content: "NONE"
         }
         rec_login(user, cat)
 		res.redirect(category)
         rec_mail(email_id)
 	})
-
 }
+
+function display(category){
+    app.get('/'+category+'/display',(req,res)=>{
+        mongoose.connect(url,connectionParams)
+        .then( () => {
+            var db=mongoose.connection.db
+            db.collection(category).findOne({email:add_to_email},function (err, data) {
+                     if (err) {
+                         console.log(err);
+                     }
+                     var display_data={
+                        title: data.title,
+                        tel: data.tel,
+                        type: data.type,
+                        cost: data.cost, 
+                        content: data.content
+                     }
+                 });
+        })
+        .catch( (err) => {
+            console.error(`Error connecting to the database while updating. \n${err}`);
+        })
+        axios.post('/'+props.type+'/delete',display_data)
+            .then(res=>console.log("sent successfully"))
+            .catch(error=>console.log(error))
+    })
+}
+
+
+del('banquet')
+del('photographer')
+del('caterer')
 
 add_details('banquet')
 add_details('photographer')
@@ -102,6 +170,10 @@ call_back('/customer','cust');
 call_back('/banquet','banq');
 call_back('/caterer','cat');
 call_back('/photographer','photog');
+
+display('banquet')
+display('photographer')
+display('caterer')
 
 app.get("*",(req,res)=>{
     res.sendFile(path.join(__dirname,"client",'build','index.html'))

@@ -23,6 +23,9 @@ function Caller(props) {
         return index !== id;
       });
     });
+    axios.post('/'+props.type+'/delete',"delete")
+      .then(res=>console.log("sent successfully"))
+      .catch(error=>console.log(error))
   }
 
   return (

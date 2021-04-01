@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
+import axios from "axios";
 
 function CreateArea(props) {
+  console.log("entered create area")
+  axios.request('/'+props.type+'/display')
+    .then(res=>console.log(res.data))
+    .catch(error=>console.log(error))
+  
   const [isExpanded, setExpanded] = useState(false);
   const [note, setNote] = useState({
     title: "",
