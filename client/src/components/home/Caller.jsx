@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Caller(props) {
   const [notes, setNotes] = useState([]);
-
+  var callId;
   function addNote(newNote) {
     console.log(newNote);
     setNotes((prevNotes) => {
@@ -18,20 +18,25 @@ function Caller(props) {
   }
 
   function deleteNote(id) {
-    setNotes((prevNotes) => {
-      return prevNotes.filter((noteItem, index) => {
-        return index !== id;
-      });
-    });
-    axios.post('/'+props.type+'/delete',"delete")
+    var cat;
+    // setNotes((prevNotes) => {
+    //   return prevNotes.filter((noteItem, index) => {
+    //     return index !== id;
+    //   });
+    // });
+    if(id == "1") cat = "caterer";
+    if(id == "2") cat = "banquet";
+    if(id == "3") cat = "photographer";
+    axios.post('/'+cat+'/delete',"delete")
       .then(res=>console.log("sent successfully"))
       .catch(error=>console.log(error))
   }
-
+  
   return (
     <div>
       <CreateArea 
-      onAdd={addNote} 
+      onAdd={addNote}
+      onDelete={deleteNote} 
       id = {props.id}
       />
       {notes.map((noteItem, index) => {

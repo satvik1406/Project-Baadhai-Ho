@@ -3,12 +3,13 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
 import axios from "axios";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function CreateArea(props) {
-  console.log("entered create area")
-  axios.request('/'+props.type+'/display')
-    .then(res=>console.log(res.data))
-    .catch(error=>console.log(error))
+  // console.log("entered create area")
+  // axios.request('/'+props.type+'/display')
+  //   .then(res=>console.log(res.data))
+  //   .catch(error=>console.log(error))
   
   const [isExpanded, setExpanded] = useState(false);
   const [note, setNote] = useState({
@@ -39,6 +40,10 @@ function CreateArea(props) {
     setExpanded((prevState) => {
       return !prevState;
     });
+  }
+
+  function handleClick() {
+    props.onDelete(props.id);
   }
 
   return (
@@ -103,6 +108,11 @@ function CreateArea(props) {
             rows={isExpanded ? 3 : 1}
           />
         )}
+        <Zoom in={isExpanded}>
+          <Fab onClick={handleClick}>
+            <DeleteIcon onClick={expand} />
+          </Fab>
+        </Zoom>
         <Zoom in={isExpanded}>
           <Fab onClick={submitNote}>
             <AddIcon onClick={expand} />

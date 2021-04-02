@@ -91,15 +91,18 @@ form.create-note textarea {
   font-family: inherit;
   resize: none;
 }
+
 form.create-note button {
-  position: absolute;
-  right: 18px;
-  bottom: -18px;
+  position: relative;
+  float: right;
+  margin: 5px;
+  right: 0px;
+  bottom: 10px;
   /* background: #f5ba13; */
   background: black;
   color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 100%;
   width: 36px;
   height: 36px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
