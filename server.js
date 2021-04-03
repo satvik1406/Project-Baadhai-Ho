@@ -20,7 +20,7 @@ app.use(passport.session());
 require("./passport.js");
 
 var add_to_email;
-const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
+const url = "mongodb+srv://bg:hello456@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
 const connectionParams={
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -71,11 +71,11 @@ function del(category){
             db.collection(category).findOneAndUpdate(
                 { email: add_to_email}, 
                 {$set:{
-                    title: "NONE", 
-                    tel: "NONE", 
-                    type: "NONE", 
-                    cost: "NONE",
-                    content: "NONE"
+                    title: "", 
+                    tel: "", 
+                    type: "", 
+                    cost: "",
+                    content: ""
                 }},
                function (err, data) {
                      if (err) {
@@ -107,6 +107,36 @@ function rec_login(user, collec_name){
         })
 }
 
+function display(category){
+    
+    app.get('/'+category+'/display',(req,res)=>{
+        mongoose.connect(url,connectionParams)
+            .then( () => {
+                var db=mongoose.connection.db
+                var display_data
+                
+                db.collection(category).findOne({email:add_to_email},function (err, data) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        if(data!=null){
+                            display_data={
+                                title: data.title,
+                                tel: data.tel,
+                                type: data.type,
+                                cost: data.cost, 
+                                content: data.content
+                            }
+                            res.json(display_data)
+                        }
+                        
+                    });
+            })
+            .catch( (err) => {
+                console.error(`Error connecting to the database while updating. \n${err}`);
+            })
+    })
+}
 function call_back(category,type){
 	app.get(category+'/google',passport.authenticate(type, {scope:['profile','email']}))
 	app.get(category+'/google/callback',
@@ -118,53 +148,17 @@ function call_back(category,type){
         var user={
             email:email_id,
             name:user_name,
-            title: "NONE",
-            tel: "NONE",
-            type: "NONE",
-            cost: "NONE", 
-            content: "NONE"
+            title: "",
+            tel: "",
+            type: "",
+            cost: "", 
+            content: ""
         }
+        rec_mail(email_id)
         rec_login(user, cat)
 		res.redirect(category)
-        rec_mail(email_id)
 	})
 }
-
-function display(category){
-    app.get('/'+category+'/display',(req,res)=>{
-        mongoose.connect(url,connectionParams)
-        .then( () => {
-            var db=mongoose.connection.db
-            db.collection(category).findOne({email:add_to_email},function (err, data) {
-                     if (err) {
-                         console.log(err);
-                     }
-                     var display_data={
-                        title: data.title,
-                        tel: data.tel,
-                        type: data.type,
-                        cost: data.cost, 
-                        content: data.content
-                     }
-                 });
-        })
-        .catch( (err) => {
-            console.error(`Error connecting to the database while updating. \n${err}`);
-        })
-        axios.post('/'+props.type+'/delete',display_data)
-            .then(res=>console.log("sent successfully"))
-            .catch(error=>console.log(error))
-    })
-}
-
-
-del('banquet')
-del('photographer')
-del('caterer')
-
-add_details('banquet')
-add_details('photographer')
-add_details('caterer')
 
 call_back('/customer','cust');
 call_back('/banquet','banq');
@@ -174,6 +168,14 @@ call_back('/photographer','photog');
 display('banquet')
 display('photographer')
 display('caterer')
+
+add_details('banquet')
+add_details('photographer')
+add_details('caterer')
+
+del('banquet')
+del('photographer')
+del('caterer')
 
 app.get("*",(req,res)=>{
     res.sendFile(path.join(__dirname,"client",'build','index.html'))
