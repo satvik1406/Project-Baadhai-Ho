@@ -1,142 +1,128 @@
 let express = require('express');
+let app = express();
+
 const path = require('path');
 const cors = require('cors');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const { profile } = require('console');
 const mongoose = require('mongoose');
-const { Db } = require('mongodb');
-const axios=require('axios');
+const red_url = require('url');
 
-let app = express();
 app.disable("x-powered-by");
 app.use(express.static("basic/public"));
 app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(express.json())
 app.use(express.static(path.join(__dirname, "client", "build")))
 app.use(passport.initialize());
 app.use(passport.session());
-require("./passport.js");
 
-var add_to_email;
-const url = "mongodb+srv://bg:hello456@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
+require("./passport");
+
+const banquet = require('./models/banquet');
+const caterer = require('./models/caterer');
+const photographer = require('./models/photographer');
+const customer = require('./models/customer');
+
+const display_all=require('./routes/display_all');
+const update=require('./routes/update');
+const del=require('./routes/delete');
+const display=require('./routes/display');
+const tocart=require('./routes/tocart');
+const send_cart=require('./routes/send_cart');
+const book=require('./routes/book');
+const remove_item=require('./routes/remove_item');
+const admin=require('./routes/admin');
+
+app.use('/', update);
+app.use('/',del);
+app.use('/',display);
+app.use('/',display_all);
+app.use('/',tocart);
+app.use('/',send_cart);
+app.use('/',book);
+app.use('/',remove_item);
+app.use('/',admin);
+
+const PORT = process.env.PORT || 5000;
+const url = "mongodb+srv://karthik:hello123@data.cyqgb.mongodb.net/db?retryWrites=true&w=majority";
+
 const connectionParams={
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true 
 }
 
-function rec_mail(email){
-    add_to_email=email;
+mongoose.connect(url,connectionParams);  
+mongoose.connection.on('connected', () => {
+    console.log('connected to Mongoose');
+});
+
+rec_login=(email_id,name,cat)=>{
+    var mod
+    if (cat=='customer'){mod=customer}
+    if (cat=='caterer'){mod=caterer}
+    if (cat=='photographer'){mod=photographer}
+    if (cat=='banquet'){mod=banquet}
+
+    mod.findOne({email: email_id}, function(err, data) {
+        if(data==null){
+            if (cat=='customer'){
+                user={
+                    email: email_id,
+                    name: name,
+                    bookings:[]
+                };
+                (new customer(user)).save()
+            }
+            if (cat=='caterer'){
+                user={
+                    email: email_id,
+                    name: name,
+                    company: null, 
+                    tel: null, 
+                    cuisines: null, 
+                    cost: null,
+                    about: null,
+                    booked_on: [],
+                    bookings:[]
+                };
+                (new caterer(user)).save()
+            }
+            if (cat=='photographer'){
+                user={
+                    email: email_id,
+                    name: name,
+                    company: null, 
+                    tel: null, 
+                    cost: null, 
+                    about: null,
+                    booked_on: [],
+                    bookings:[]
+                };
+                (new photographer(user)).save()
+            }
+        
+            if (cat=='banquet'){
+                user={
+                    email: email_id,
+                    name: name,
+                    company: null, 
+                    tel: null, 
+                    capacity: null, 
+                    cost: null,
+                    about: null,
+                    booked_on: [] ,
+                    bookings:[]         
+                };
+                (new banquet(user)).save()
+            }   
+        }
+      }
+    );
 }
 
-function add_details(category){
-    app.post('/'+category+'/update', (req, res, next) => {
-        res.status(201).json({
-          message: 'Thing created successfully!'
-        });
-        mongoose.connect(url,connectionParams)
-        .then( () => {
-            var db=mongoose.connection.db
-            db.collection(category).findOneAndUpdate(
-                { email: add_to_email}, 
-                {$set:{
-                    title: req.body.title, 
-                    tel: req.body.tel, 
-                    type: req.body.type, 
-                    cost: req.body.cost,
-                    content: req.body.content
-                }},
-               function (err, data) {
-                     if (err) {
-                         console.log(err);
-                     }
-                 });
-        })
-        .catch( (err) => {
-            console.error(`Error connecting to the database while updating. \n${err}`);
-        })
-    });
-}
-
-function del(category){
-    app.post('/'+category+'/delete', (req, res, next) => {
-        res.status(301).json({
-          message: 'Thing created successfully!'
-        });
-        mongoose.connect(url,connectionParams)
-        .then( () => {
-            var db=mongoose.connection.db
-            db.collection(category).findOneAndUpdate(
-                { email: add_to_email}, 
-                {$set:{
-                    title: "", 
-                    tel: "", 
-                    type: "", 
-                    cost: "",
-                    content: ""
-                }},
-               function (err, data) {
-                     if (err) {
-                         console.log(err);
-                     }
-                 });
-        })
-        .catch( (err) => {
-            console.error(`Error connecting to the database while updating. \n${err}`);
-        })
-    });
-}
-
-function rec_login(user, collec_name){
-    mongoose.connect(url,connectionParams)
-        .then( () => {
-            var db=mongoose.connection.db
-            db.collection(collec_name).findOne({email:user.email},function(err,data){
-                if(err){
-                    console.log(err)
-                }
-                if(data==null){
-                    db.collection(collec_name).insertOne(user)
-                }
-            })
-        })
-        .catch( (err) => {
-            console.error(`Error connecting to the database. \n${err}`);
-        })
-}
-
-function display(category){
-    
-    app.get('/'+category+'/display',(req,res)=>{
-        mongoose.connect(url,connectionParams)
-            .then( () => {
-                var db=mongoose.connection.db
-                var display_data
-                
-                db.collection(category).findOne({email:add_to_email},function (err, data) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        if(data!=null){
-                            display_data={
-                                title: data.title,
-                                tel: data.tel,
-                                type: data.type,
-                                cost: data.cost, 
-                                content: data.content
-                            }
-                            res.json(display_data)
-                        }
-                        
-                    });
-            })
-            .catch( (err) => {
-                console.error(`Error connecting to the database while updating. \n${err}`);
-            })
-    })
-}
 function call_back(category,type){
 	app.get(category+'/google',passport.authenticate(type, {scope:['profile','email']}))
 	app.get(category+'/google/callback',
@@ -145,18 +131,27 @@ function call_back(category,type){
         let user_name=data.displayName
         let email_id=data.emails[0].value
         cat=category.substring(1);
-        var user={
-            email:email_id,
-            name:user_name,
-            title: "",
-            tel: "",
-            type: "",
-            cost: "", 
-            content: ""
+        
+        if(cat=='admin'){
+            if(email_id=='f20170927@hyderabad.bits-pilani.ac.in' || email_id=='f20171449@hyderabad.bits-pilani.ac.in' || email_id=='f20171083@hyderabad.bits-pilani.ac.in' || email_id=='f20171011@hyderabad.bits-pilani.ac.in'){
+                res.redirect(category);
+            }
+            else{
+                res.send('<html><body><h1>YOU ARE NOT AUTHORIZED!!!</h1></body></html>');
+            }
         }
-        rec_mail(email_id)
-        rec_login(user, cat)
-		res.redirect(category)
+        else{
+            rec_login(email_id,user_name, cat)
+
+            res.redirect(red_url.format({
+                pathname:category,
+                query: {
+                "email": email_id,
+                "username": user_name
+                }
+                }));
+        }
+
 	})
 }
 
@@ -164,32 +159,12 @@ call_back('/customer','cust');
 call_back('/banquet','banq');
 call_back('/caterer','cat');
 call_back('/photographer','photog');
-
-display('banquet')
-display('photographer')
-display('caterer')
-
-add_details('banquet')
-add_details('photographer')
-add_details('caterer')
-
-del('banquet')
-del('photographer')
-del('caterer')
+call_back('/admin','admin');
 
 app.get("*",(req,res)=>{
     res.sendFile(path.join(__dirname,"client",'build','index.html'))
 })
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
-
-// "client-install": "npm install --prefix client",
-//     "start": "node server.js",
-//     "client": "npm start --prefix client",
-//     "test": "echo \"Error: no test specified\" && exit 1",
-//     "server": "nodemon server.js ",
-//     "dev": "concurrently \"cd client && npm run start\" \"npm run server\"",
-//     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client        && npm run build --prefix client"

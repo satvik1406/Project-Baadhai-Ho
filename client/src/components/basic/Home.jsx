@@ -6,15 +6,19 @@ import camera from "./images/video-camera.png";
 import customer from "./images/customer.png";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import {Link} from 'react-router-dom';
+import  {Switch,BrowserRouter, Route}  from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 function Home() {
   return (
     <Container>
       <div className="Container">
         <Row>
-          <h1 style={{ textAlign: "center", margin: "50px 0px 0px 0px" }}>
+          <h2 style={{ textAlign: "center", margin: "50px 100px 0px" }}>
             ONE SINGLE PLATFORM FOR VARIOUS IN-PERSON EVENTS !!
-          </h1>
+          </h2>
         </Row>
 
         <Row>
@@ -55,7 +59,25 @@ function Home() {
             variab="photographer"
           />
         </Row>
-        
+        <Row style={{margin:"20px auto auto 0px"}}>
+        <Col></Col>
+        <Col style={{margin:"0px auto 40px 170px"}}>
+        <Route
+            render={({ history }) => (
+              <Link
+                variant="outline-dark"
+                onClick={() => {
+                  window.location.assign("/"+"admin"+"/google");
+                  history.push("/admin/google");
+                }}
+              >
+              Admin Login
+              </Link>
+            )}
+          />
+          </Col>
+          <Col></Col>
+        </Row>
       </div>
     </Container>
   );

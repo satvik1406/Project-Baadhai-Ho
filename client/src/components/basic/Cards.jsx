@@ -27,9 +27,9 @@ function Cards(props) {
           <Route
             render={({ history }) => (
               <Button
-                variant="outline-dark"
+                variant="dark"
                 onClick={() => {
-                  window.location.assign("http://localhost:5000/"+props.variab+"/google");
+                  window.location.assign("/"+props.variab+"/google");
                   history.push(props.route);
                 }}
               >

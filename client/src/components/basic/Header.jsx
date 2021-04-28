@@ -1,12 +1,20 @@
 import React from "react";
-
+import Button from "react-bootstrap/Button";
 function Header() {
   return (
     <header>
-      <h1>
-        BaadhaiHo
-      </h1>
-    </header>
+        <span style={{color: "#fff",fontWeight:"400",fontSize:"2em"}}>BaadhaiHo</span>
+        <Button
+          style={{float:"right",position:"abs"}}
+          variant="outline-secondary"
+          onClick={() => {
+          window.location.assign("/");
+          history.push(props.route);
+          }}
+          >
+          Home
+        </Button>
+      </header>
   );
 }
 

@@ -91,7 +91,6 @@ form.create-note textarea {
   font-family: inherit;
   resize: none;
 }
-
 form.create-note button {
   position: relative;
   float: right;
